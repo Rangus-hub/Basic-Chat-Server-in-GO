@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Client</title>
+</head>
+<body>
+    <h1>WebSocket Client</h1>
+    <textarea id="message" rows="4" cols="50" placeholder="Enter your message"></textarea><br>
+    <button onclick="sendMessage()">Send Message</button>
+
+    <script>
+        const socket = new WebSocket("ws://localhost:8080/ws");
+
+        socket.addEventListener("open", () => {
+            console.log("Connected to server");
+        });
+
+        socket.addEventListener("error", (error) => {
+            console.error("WebSocket error:", error);
+        });
+
+        socket.addEventListener("message", (event) => {
+            const message = event.data;
+            console.log("Received message from server:", message);
+            // You can handle the received message here, for example, display it in the HTML
+        });
+
+        function sendMessage() {
+            const message = document.getElementById("message").value;
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send(message);
+                console.log('Sent message to server:', message);
+            } else {
+                console.error("WebSocket is not open");
+            }
+
+            // Handle incoming messages
+       
+        }
+    </script>
+</body>
+</html>

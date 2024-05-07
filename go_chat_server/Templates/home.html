@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Chat Room</h1>
+    <div id="messages"></div>
+    <input type="text" id="messageInput" placeholder="Type your message...">
+    
+    <script>
+        const socket = new WebSocket("ws://localhost:8080/ws");
+
+        socket.addEventListener("open", () => {
+            console.log("Connected to server");
+        });
+
+        socket.addEventListener("error", (error) => {
+            console.error("WebSocket error:", error);
+        });
+
+        socket.addEventListener("message", (event) => {
+            const message = JSON.parse(event.data);
+            const messagesDiv = document.getElementById("messages");
+            const messageElement = document.createElement("div");
+            messageElement.textContent = `${message.username}: ${message.message}`;
+            messagesDiv.appendChild(messageElement);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        });
+
+        document.getElementById("messageInput").addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+                const messageInput = document.getElementById("messageInput");
+                const message = messageInput.value.trim();
+                if (message !== "") {
+                    socket.send(JSON.stringify({ message: message }));
+                    messageInput.value = "";
+                }
+            }
+        });
+    </script>
+</body>
+</html>

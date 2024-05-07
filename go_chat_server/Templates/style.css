@@ -1,0 +1,18 @@
+/* CSS styles for the chat room */
+body {
+    font-family: Arial, sans-serif;
+}
+
+#messages {
+    height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+#messageInput {
+    width: 100%;
+    padding: 5px;
+    margin-top: 10px;
+    box-sizing: border-box;
+}
